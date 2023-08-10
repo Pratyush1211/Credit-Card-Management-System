@@ -1,13 +1,9 @@
 package com.citi.creditcard.exceptions;
 
-public class CityNotFoundException extends Exception {
-    CityNotFoundException(){
-        super();
-    }
+public class CityNotFoundException extends RuntimeException {
 
-    CityNotFoundException(String message){
+    public CityNotFoundException(String message) {
         super(message);
     }
-
-
 }
+

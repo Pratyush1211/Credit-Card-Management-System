@@ -17,13 +17,6 @@ public class CreditcardApplication {
 
 		ApplicationContext applicationContext = SpringApplication.run(CreditcardApplication.class, args);
 
-		TransactionService transactionService = applicationContext.getBean(TransactionService.class);
-
-
-
-		System.out.println(transactionService.findByMerchant("Abbott-Rogahn"));
-
-
 	}
 
 }

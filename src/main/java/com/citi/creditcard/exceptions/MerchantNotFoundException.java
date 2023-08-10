@@ -1,15 +1,8 @@
 package com.citi.creditcard.exceptions;
 
-public class MerchantNotFoundException extends Exception {
+public class MerchantNotFoundException extends RuntimeException {
 
-    MerchantNotFoundException(){
-        super();
-    }
-
-    MerchantNotFoundException(String message){
+    public MerchantNotFoundException(String message) {
         super(message);
     }
-
-
-
 }

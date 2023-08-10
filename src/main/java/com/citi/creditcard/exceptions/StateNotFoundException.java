@@ -1,13 +1,8 @@
 package com.citi.creditcard.exceptions;
 
-public class StateNotFoundException extends Exception{
-    StateNotFoundException(){
-        super();
-    }
+public class StateNotFoundException extends RuntimeException {
 
-    StateNotFoundException(String message){
+    public StateNotFoundException(String message) {
         super(message);
     }
-
-
 }
