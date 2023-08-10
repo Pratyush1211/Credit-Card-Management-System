@@ -1,13 +1,29 @@
 package com.citi.creditcard;
 
+import com.citi.creditcard.entity.Transaction;
+import com.citi.creditcard.services.TransactionService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+
+import java.awt.*;
+import java.util.List;
 
 @SpringBootApplication
 public class CreditcardApplication {
 
+
 	public static void main(String[] args) {
-		SpringApplication.run(CreditcardApplication.class, args);
+
+		ApplicationContext applicationContext = SpringApplication.run(CreditcardApplication.class, args);
+
+		TransactionService transactionService = applicationContext.getBean(TransactionService.class);
+
+
+
+		System.out.println(transactionService.findByMerchant("Abbott-Rogahn"));
+
+
 	}
 
 }
