@@ -1,13 +1,9 @@
 package com.citi.creditcard;
 
-import com.citi.creditcard.entity.Transaction;
-import com.citi.creditcard.services.TransactionService;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-
-import java.awt.*;
-import java.util.List;
 
 @SpringBootApplication
 public class CreditcardApplication {
