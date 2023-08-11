@@ -6,7 +6,10 @@ import com.citi.creditcard.exceptions.TransactionsNotFoundException;
 import com.citi.creditcard.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,15 +31,15 @@ public class TransactionController {
      * @return transactions
      */
     @GetMapping("/findByMerchant")
-    public ResponseEntity<Object> getTransactionByMerchant(@RequestParam String merchant){
+    public ResponseEntity<Object> getTransactionByMerchant(@RequestParam(name = "merchant") String merchant){
         try {
             List<Transaction> transactions = transactionService.getAllByMerchant(merchant);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(transactions);
         } catch(IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         catch (TransactionsNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(e.getMessage());
+            throw new TransactionsNotFoundException(e.getMessage());
         }
     }
 
@@ -52,10 +55,10 @@ public class TransactionController {
             List<Transaction> transactions = transactionService.getAllByCity(city);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(transactions);
         } catch(IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         catch (TransactionsNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(e.getMessage());
+            throw new TransactionsNotFoundException(e.getMessage());
         }
     }
 
@@ -71,10 +74,10 @@ public class TransactionController {
             List<Transaction> transactions = transactionService.getAllByState(state);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(transactions);
         } catch(IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         catch (TransactionsNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(e.getMessage());
+            throw new TransactionsNotFoundException(e.getMessage());
         }
     }
 

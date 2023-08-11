@@ -19,7 +19,7 @@ public class TransactionService implements ITransactionService {
 
     @Override
     public List<Transaction> getAllByMerchant(String merchant){
-        validateStringNotEmpty(merchant, "Merchant cannot be empty");
+        validateStringNotEmpty(merchant, "Please enter merchant to search");
         List<Transaction> transactions = repo.findByMerchant(merchant);
         checkTransactionsNotEmpty(transactions, "No merchant found with name : " + merchant);
         return transactions;
@@ -27,7 +27,7 @@ public class TransactionService implements ITransactionService {
 
     @Override
     public List<Transaction> getAllByCity(String city){
-        validateStringNotEmpty(city, "City cannot be empty");
+        validateStringNotEmpty(city, "Please enter a city to search");
         List<Transaction> transactions = repo.findByCity(city);
         checkTransactionsNotEmpty(transactions, "No city found with name : " + city);
         return transactions;
@@ -35,7 +35,7 @@ public class TransactionService implements ITransactionService {
 
     @Override
     public List<Transaction> getAllByState(String state){
-        validateStringNotEmpty(state, "State cannot be empty");
+        validateStringNotEmpty(state, "Please enter a city to search");
         List<Transaction> transactions = repo.findByState(state);
         checkTransactionsNotEmpty(transactions, "No state found with name : " + state);
         return transactions;
