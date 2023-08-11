@@ -22,7 +22,7 @@ public interface ITransactionService {
 
     public List<String> getAllDistinctStates();
 
-
+    public List<Transaction> getAllBySpendingAmount(double low,double high);
 
 
 

@@ -59,6 +59,16 @@ public class TransactionController {
         }
     }
 
+    /**
+     * @param low, high //
+     * @return transactions
+     */
+
+    @GetMapping("/spendingamt")
+    public ResponseEntity<Object> getTransactionBySpendingAmt(@RequestParam double low,@RequestParam double high){
+        List<Transaction> transactions=transactionService.getAllBySpendingAmount(low,high);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(transactions);
+    }
 
     /**
      *
