@@ -11,8 +11,8 @@ public class ResponseHandler {
     public static ResponseEntity<Object> generateResponse(LocalDateTime timestamp, String message, HttpStatus status, Object responseObj) {
         Map<String, Object> map = new HashMap<>();
         map.put("timestamp", timestamp);
+        map.put("status", status.value());
         map.put("message", message);
-        map.put("status", status.getReasonPhrase());
         map.put("data", responseObj);
         return new ResponseEntity<>(map,status);
     }

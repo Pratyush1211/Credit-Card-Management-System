@@ -9,6 +9,7 @@ import com.citi.creditcard.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.geom.IllegalPathStateException;
 import java.util.List;
 
 @Service
@@ -57,7 +58,7 @@ public class TransactionService implements ITransactionService {
     // To check empty parameter
     private void validateStringNotEmpty(String value, String message) {
         if (value == null || value.trim().isEmpty()) {
-            throw new IllegalArgumentException(message);
+            throw new IllegalPathStateException(message);
         }
     }
 

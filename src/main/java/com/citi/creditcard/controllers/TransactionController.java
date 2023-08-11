@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.geom.IllegalPathStateException;
 import java.time.LocalDateTime;
 
 import java.util.List;
@@ -30,15 +31,15 @@ public class TransactionController {
      * @return transactions
      */
     @GetMapping("/merchant/{merchant}")
-    public ResponseEntity<Object> getTransactionByMerchant(@PathVariable String merchant){
+    public ResponseEntity<Object> getTransactionByMerchant(@PathVariable(required = false) String merchant){
         try {
             List<Transaction> transactions = transactionService.getAllByMerchant(merchant);
             return ResponseHandler.generateResponse(LocalDateTime.now(),"Data retrieved successfully", HttpStatus.OK, transactions);
-        } catch(IllegalArgumentException e) {
+        } catch(IllegalPathStateException e) {
             return ResponseHandler.generateResponse(LocalDateTime.now(), e.getMessage(), HttpStatus.BAD_REQUEST, null );
         }
         catch (TransactionsNotFoundException e) {
-            return ResponseHandler.generateResponse(LocalDateTime.now(), e.getMessage(), HttpStatus.OK, null);
+            return ResponseHandler.generateResponse(LocalDateTime.now(), e.getMessage(), HttpStatus.OK, new Object[0]);
         }
     }
 
@@ -54,11 +55,11 @@ public class TransactionController {
         try {
             List<Transaction> transactions = transactionService.getAllByCity(city);
             return ResponseHandler.generateResponse(LocalDateTime.now(),"Data retrieved successfully", HttpStatus.OK, transactions);
-        } catch(IllegalArgumentException e) {
-            return ResponseHandler.generateResponse(LocalDateTime.now(),"Data retrieval unsuccessfully", HttpStatus.OK, null);
+        } catch(IllegalPathStateException e) {
+            return ResponseHandler.generateResponse(LocalDateTime.now(),e.getMessage(), HttpStatus.BAD_REQUEST, null);
         }
         catch (TransactionsNotFoundException e) {
-            return ResponseHandler.generateResponse(LocalDateTime.now(),"Data retrieved successfully", HttpStatus.OK, null);
+            return ResponseHandler.generateResponse(LocalDateTime.now(),e.getMessage(), HttpStatus.OK, new Object[0]);
         }
     }
 
@@ -73,11 +74,11 @@ public class TransactionController {
         try {
             List<Transaction> transactions = transactionService.getAllByState(state);
             return ResponseHandler.generateResponse(LocalDateTime.now(),"Data retrieved successfully", HttpStatus.OK, transactions);
-        } catch(IllegalArgumentException e) {
-            return ResponseHandler.generateResponse(LocalDateTime.now(),"Data retrieval unsuccessfully", HttpStatus.BAD_REQUEST, null);
+        } catch(IllegalPathStateException e) {
+            return ResponseHandler.generateResponse(LocalDateTime.now(),e.getMessage(), HttpStatus.BAD_REQUEST, null);
         }
         catch (TransactionsNotFoundException e) {
-            return ResponseHandler.generateResponse(LocalDateTime.now(),"Data retrieved successfully", HttpStatus.OK, null);
+            return ResponseHandler.generateResponse(LocalDateTime.now(),e.getMessage(), HttpStatus.OK, new Object[0]);
         }
     }
 
