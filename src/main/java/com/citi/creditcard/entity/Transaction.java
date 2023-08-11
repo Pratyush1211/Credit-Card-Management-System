@@ -186,23 +186,22 @@ public class Transaction {
 
     @Override
     public String toString(){
-        return "Transaction {" +
-                "firstName = " + firstName + '\'' +
-                "lastName  = " + lastName  + '\'' +
-                "Gender    = " + gender    + '\'' +
-                "DOB       = " + DOB       + '\'' +
-                "Merchant  = " + merchant  + '\'' +
-                "JOB       = " + Job       + '\'' +
-                "State     = " + state     + '\'' +
-                "Amount    = " + amount    + '\'' +
-                "Transaction_data_and_time = " + transactionDataandTime + '\'' +
-                "Category  = " + category  + '\'' +
-                "Transaction_number        = " + transactionNumber      + '\'' +
-                "City      = " + city      + '\'' +
-                "City_population           = " + cityPopulation         + '\'' +
-                "CustomerId                = " + customerId             + '\'' +
-                "}";
-
+        return String.format("Transaction : [first= %s, last= %s, dob= %s, gender= %s, merchant= %s, Job= %s, state= %s, amt= %s, trans_date_trans_time= %s, category= %s, trans_num= %s, city= %s, city_population= %s, customer_id= %s ]",
+                firstName,
+                lastName,
+                DOB,
+                gender,
+                merchant,
+                Job,
+                state,
+                amount,
+                transactionDataandTime,
+                category,
+                transactionNumber,
+                city,
+                cityPopulation,
+                customerId
+                );
 
      }
 

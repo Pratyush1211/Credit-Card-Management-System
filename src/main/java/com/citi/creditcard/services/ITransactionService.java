@@ -12,7 +12,17 @@ public interface ITransactionService {
 
 
 
-    public List<Transaction> findByMerchant(String merchant) throws MerchantNotFoundException;
+    public List<Transaction> getAllByMerchant(String merchant);
+
+    public List<Transaction> getAllByCity(String city);
+
+    public List<String> getAllDistinctCity();
+
+    public List<Transaction> getAllByState(String state);
+
+    public List<String> getAllDistinctStates();
+
+
 
 
 
