@@ -61,6 +61,28 @@ public class TransactionService implements ITransactionService {
     @Override
     public List<Transaction> getAllBySpendingAmount(double low,double high) { return repo.findByAmount(low,high);}
 
+    @Override
+    public List<String> getAllDistinctSpendingCategories(){
+        return repo.findDistinctSpendingCategories();
+    }
+
+    @Override
+    public Page<Transaction> getAllByGender(String gender, Pageable pageable){
+        validateStringNotEmpty(gender, "Please select male or female");
+        Page<Transaction> transactions = repo.findByGender(gender, pageable);
+        checkTransactionsNotEmpty(transactions, "No state found with gender : " + gender);
+        return transactions;
+    }
+
+    @Override
+    public Page<Transaction> getAllBySpendingCategory(String category, Pageable pageable){
+        validateStringNotEmpty(category, "Please enter a category to search");
+        Page<Transaction> transactions = repo.findByCategory(category, pageable);
+        checkTransactionsNotEmpty(transactions, "No state found with name : " + category);
+        return transactions;
+
+    }
+
     // To check empty parameter
     private void validateStringNotEmpty(String value, String message) {
         System.out.println(value);

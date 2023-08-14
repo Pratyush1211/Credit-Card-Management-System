@@ -35,5 +35,16 @@ public interface TransactionRepository extends MongoRepository<Transaction, Inte
     List<Transaction> findByAmount(double low, double high);
 
 
+    Page<Transaction> findByGender(String gender, Pageable pageable);
+
+    @Aggregation(pipeline = {
+            "{$group: {_id: '$category'}}",
+            "{$sort: {_id: 1}}"
+    })
+    List<String> findDistinctSpendingCategories();
+
+    Page<Transaction> findByCategory(String category, Pageable pageable);
+
+
 
 }

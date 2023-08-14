@@ -24,6 +24,12 @@ public interface ITransactionService {
 
     public List<Transaction> getAllBySpendingAmount(double low,double high);
 
+    public Page<Transaction> getAllByGender(String gender, Pageable pageable);
+
+    public List<String> getAllDistinctSpendingCategories();
+
+    public Page<Transaction> getAllBySpendingCategory(String category, Pageable pageable);
+
 
 
 

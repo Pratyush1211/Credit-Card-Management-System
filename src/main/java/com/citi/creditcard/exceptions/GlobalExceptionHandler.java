@@ -3,12 +3,10 @@ package com.citi.creditcard.exceptions;
 import com.citi.creditcard.utility.ErrorResponseHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.net.BindException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -26,6 +24,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomerAlreadyExistsException.class)
     public ResponseEntity<Object> handleCustomerAlreadyExists( CustomerAlreadyExistsException e) {
+        return ErrorResponseHandler.generateResponse(e, HttpStatus.BAD_REQUEST, null);
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<Object> handleCustomerNotFound( CustomerNotFoundException e) {
         return ErrorResponseHandler.generateResponse(e, HttpStatus.BAD_REQUEST, null);
     }
 

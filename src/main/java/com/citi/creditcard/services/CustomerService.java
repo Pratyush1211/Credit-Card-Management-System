@@ -1,10 +1,14 @@
 package com.citi.creditcard.services;
 
 import com.citi.creditcard.entity.Customer;
+
 import com.citi.creditcard.exceptions.CustomerAlreadyExistsException;
-import com.citi.creditcard.exceptions.TransactionsNotFoundException;
+
+import com.citi.creditcard.exceptions.CustomerNotFoundException;
 import com.citi.creditcard.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,5 +50,30 @@ public class CustomerService implements ICustomerService{
         return  repo.save(data);
     }
 
+    @Override
+    public Page<Customer> getAllCustomers(Pageable pageable){
+         return repo.findAll(pageable);
+    }
+
+
+    @Override
+    public Customer deleteCustomer(Integer customerId){
+        if (customerId == null) {
+            throw new IllegalArgumentException("Please enter customer ID");
+        }
+        if (!repo.existsByCustomerId(customerId))
+            throw new CustomerNotFoundException("No customer exists with ID: " + customerId);
+        return repo.deleteCustomerByCustomerId(customerId);
+    }
+
+    @Override
+    public Customer getCustomer(Integer customerId){
+        if (customerId == null) {
+            throw new IllegalArgumentException("Please enter customer ID");
+        }
+        if (!repo.existsByCustomerId(customerId))
+            throw new CustomerNotFoundException("No customer exists with ID: " + customerId);
+        return repo.deleteCustomerByCustomerId(customerId);
+    }
 
 }

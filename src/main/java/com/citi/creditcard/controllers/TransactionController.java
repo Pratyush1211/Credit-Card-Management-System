@@ -91,6 +91,42 @@ public class TransactionController {
 
     }
 
+    @GetMapping("by-gender/{gender}")
+    public ResponseEntity<Object> getTransactionsByGenderWithPagination(
+            @PathVariable String gender,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        List<Transaction> transactions;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Transaction> pageTransaction = transactionService.getAllByGender(gender, pageable);
+        transactions = pageTransaction.getContent();
+
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data retrieved successfully", HttpStatus.OK, transactions, pageTransaction);
+
+    }
+
+
+    @GetMapping("by-category/{category}")
+    public ResponseEntity<Object> getTransactionsBySpendingCategoryWithPagination(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        List<Transaction> transactions;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Transaction> pageTransaction = transactionService.getAllBySpendingCategory(category, pageable);
+        transactions = pageTransaction.getContent();
+
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data retrieved successfully", HttpStatus.OK, transactions, pageTransaction);
+
+    }
+
+
     @GetMapping("/states")
     public ResponseEntity<Object> getStates(){
         List<String> transactions = transactionService.getAllDistinctStates();
@@ -100,6 +136,12 @@ public class TransactionController {
     @GetMapping("/cities")
     public ResponseEntity<Object> getCities(){
         List<String> transactions = transactionService.getAllDistinctCity();
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data Retrieved Successfully", HttpStatus.OK, transactions, null );
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<Object> getSpendingCategories(){
+        List<String> transactions = transactionService.getAllDistinctSpendingCategories();
         return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data Retrieved Successfully", HttpStatus.OK, transactions, null );
     }
 }
