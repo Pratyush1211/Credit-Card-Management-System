@@ -6,7 +6,7 @@ import com.citi.creditcard.entity.Transaction;
 import com.citi.creditcard.exceptions.TransactionsNotFoundException;
 import com.citi.creditcard.repository.TransactionRepository;
 
-
+import org.apache.el.parser.AstPlus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,10 +58,8 @@ public class TransactionService implements ITransactionService {
         return repo.findDistinctCityValues();
     }
 
-
-
-
-
+    @Override
+    public List<Transaction> getAllBySpendingAmount(double low,double high) { return repo.findByAmount(low,high);}
 
     // To check empty parameter
     private void validateStringNotEmpty(String value, String message) {

@@ -21,4 +21,11 @@ public interface ITransactionService {
     public Page<Transaction> getAllByState(String state, Pageable pageable);
 
     public List<String> getAllDistinctStates();
+
+    public List<Transaction> getAllBySpendingAmount(double low,double high);
+
+
+
+
+
 }
