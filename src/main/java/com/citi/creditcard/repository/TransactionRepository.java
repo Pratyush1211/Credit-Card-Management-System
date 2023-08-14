@@ -30,8 +30,8 @@ public interface TransactionRepository extends MongoRepository<Transaction, Inte
     })
     List<String> findDistinctStateValues();
 
-
-
+    @Query("{'amt' : {$gte : ?0, $lte : ?1}}")
+    List<Transaction> findByAmount(double low, double high);
 
 
 
