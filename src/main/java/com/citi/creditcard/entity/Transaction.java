@@ -39,7 +39,7 @@ public class Transaction {
     private String category;
 
     @Field("trans_num")
-    private String transactionNumber;
+    private int transactionNumber;
 
     @Field("city")
     private String city;
@@ -55,7 +55,7 @@ public class Transaction {
 
     }
 
-    public Transaction(String DOB, String firstName, String gender, String lastName, String merchant, String job, String state, double amount, String transactionDataandTime, String category, String transactionNumber, String city, int cityPopulation, int customerId) {
+    public Transaction(String DOB, String firstName, String gender, String lastName, String merchant, String job, String state, double amount, String transactionDataandTime, String category, int transactionNumber, String city, int cityPopulation, int customerId) {
         this.DOB = DOB;
         this.firstName = firstName;
         this.gender = gender;
@@ -152,11 +152,11 @@ public class Transaction {
         this.category = category;
     }
 
-    public String getTransactionNumber() {
+    public int getTransactionNumber() {
         return transactionNumber;
     }
 
-    public void setTransactionNumber(String transactionNumber) {
+    public void setTransactionNumber(int transactionNumber) {
         this.transactionNumber = transactionNumber;
     }
 

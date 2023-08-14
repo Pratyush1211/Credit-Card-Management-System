@@ -4,14 +4,17 @@ import com.citi.creditcard.entity.Transaction;
 
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.domain.Page;
+
+import org.springframework.data.domain.Pageable;
 
 
 import java.util.List;
 
 public interface TransactionRepository extends MongoRepository<Transaction, Integer> {
 
-    List<Transaction> findByMerchant(String merchant);
-    List<Transaction> findByCity(String city);
+    Page<Transaction> findByMerchant(String merchant, Pageable pageable);
+    Page<Transaction> findByCity(String city, Pageable pageable);
 
     @Aggregation(pipeline = {
             "{$group: {_id: '$city'}}",
@@ -19,7 +22,7 @@ public interface TransactionRepository extends MongoRepository<Transaction, Inte
     })
     List<String> findDistinctCityValues();
 
-    List<Transaction> findByState(String state);
+    Page<Transaction> findByState(String state, Pageable pageable);
 
     @Aggregation(pipeline = {
             "{$group: {_id: '$state'}}",

@@ -2,23 +2,23 @@ package com.citi.creditcard.controllers;
 
 import com.citi.creditcard.entity.Transaction;
 
-import com.citi.creditcard.exceptions.TransactionsNotFoundException;
 import com.citi.creditcard.services.TransactionService;
-import com.citi.creditcard.utility.ResponseHandler;
+import com.citi.creditcard.utility.SuccessResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.geom.IllegalPathStateException;
 import java.time.LocalDateTime;
-
 import java.util.List;
 
+
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/api/transactions")
+@RequestMapping("/api/transactions/")
 
 public class TransactionController {
 
@@ -26,83 +26,80 @@ public class TransactionController {
     private TransactionService transactionService;
 
     /**
-     *
      * @param merchant //
      * @return transactions
      */
-    @GetMapping("/merchant/{merchant}")
-    public ResponseEntity<Object> getTransactionByMerchant(@PathVariable(required = false) String merchant){
-        try {
-            List<Transaction> transactions = transactionService.getAllByMerchant(merchant);
-            return ResponseHandler.generateResponse(LocalDateTime.now(),"Data retrieved successfully", HttpStatus.OK, transactions);
-        } catch(IllegalPathStateException e) {
-            return ResponseHandler.generateResponse(LocalDateTime.now(), e.getMessage(), HttpStatus.BAD_REQUEST, null );
-        }
-        catch (TransactionsNotFoundException e) {
-            return ResponseHandler.generateResponse(LocalDateTime.now(), e.getMessage(), HttpStatus.OK, new Object[0]);
-        }
+    @GetMapping("by-merchant/{merchant}")
+    public ResponseEntity<Object> getTransactionsByMerchantWithPagination(
+            @PathVariable String merchant,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+            List<Transaction> transactions;
+            Pageable pageable = PageRequest.of(page, size);
+
+            Page<Transaction> pageTransaction = transactionService.getAllByMerchant(merchant, pageable);
+            transactions = pageTransaction.getContent();
+
+            return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data retrieved successfully", HttpStatus.OK, transactions, pageTransaction);
+
     }
 
 
-    /**
-     *
-     * @param city //
-     * @return transactions
-     */
+    @GetMapping("by-cities/{city}")
+    public ResponseEntity<Object> getTransactionsByCityWithPagination(
+            @PathVariable String city,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
 
-    @GetMapping("/city/{city}")
-    public ResponseEntity<Object> getTransactionByCity(@PathVariable String city){
-        try {
-            List<Transaction> transactions = transactionService.getAllByCity(city);
-            return ResponseHandler.generateResponse(LocalDateTime.now(),"Data retrieved successfully", HttpStatus.OK, transactions);
-        } catch(IllegalPathStateException e) {
-            return ResponseHandler.generateResponse(LocalDateTime.now(),e.getMessage(), HttpStatus.BAD_REQUEST, null);
-        }
-        catch (TransactionsNotFoundException e) {
-            return ResponseHandler.generateResponse(LocalDateTime.now(),e.getMessage(), HttpStatus.OK, new Object[0]);
-        }
+        List<Transaction> transactions;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Transaction> pageTransaction = transactionService.getAllByCity(city, pageable);
+        transactions = pageTransaction.getContent();
+
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data retrieved successfully", HttpStatus.OK, transactions, pageTransaction);
+
     }
 
+    @GetMapping("by-states/{state}")
+    public ResponseEntity<Object> getTransactionsByStatesWithPagination(
+            @PathVariable String state,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
 
-    /**
-     *
-     * @param state //
-     * @return transactions
-     */
-    @GetMapping("/state/{state}")
-    public ResponseEntity<Object> getTransactionByState(@PathVariable String state){
-        try {
-            List<Transaction> transactions = transactionService.getAllByState(state);
-            return ResponseHandler.generateResponse(LocalDateTime.now(),"Data retrieved successfully", HttpStatus.OK, transactions);
-        } catch(IllegalPathStateException e) {
-            return ResponseHandler.generateResponse(LocalDateTime.now(),e.getMessage(), HttpStatus.BAD_REQUEST, null);
-        }
-        catch (TransactionsNotFoundException e) {
-            return ResponseHandler.generateResponse(LocalDateTime.now(),e.getMessage(), HttpStatus.OK, new Object[0]);
-        }
+        List<Transaction> transactions;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Transaction> pageTransaction = transactionService.getAllByState(state, pageable);
+        transactions = pageTransaction.getContent();
+
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data retrieved successfully", HttpStatus.OK, transactions, pageTransaction);
+
     }
 
     @GetMapping("/states")
     public ResponseEntity<Object> getStates(){
-            try {
-                List<String> transactions = transactionService.getAllDistinctStates();
-                return ResponseHandler.generateResponse(LocalDateTime.now(), "Data retrieved successfully", HttpStatus.OK, transactions);
-            } catch (RuntimeException e){
-                return ResponseHandler.generateResponse(LocalDateTime.now(),"Data retrieval unsuccessfully", HttpStatus.INTERNAL_SERVER_ERROR, null);
-            }
+        List<String> transactions = transactionService.getAllDistinctStates();
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data Retrieved Successfully", HttpStatus.OK, transactions, null );
     }
-
 
     @GetMapping("/cities")
     public ResponseEntity<Object> getCities(){
-        try {
-            List<String> transactions = transactionService.getAllDistinctStates();
-            return ResponseHandler.generateResponse(LocalDateTime.now(), "Data retrieved successfully", HttpStatus.OK, transactions);
-        } catch (RuntimeException e){
-            return ResponseHandler.generateResponse(LocalDateTime.now(),"Data retrieval unsuccessfully", HttpStatus.INTERNAL_SERVER_ERROR, null);
-        }
+        List<String> transactions = transactionService.getAllDistinctCity();
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data Retrieved Successfully", HttpStatus.OK, transactions, null );
     }
-
-
-
 }
+
+
+
+
+
+
+
+
+
+
