@@ -2,23 +2,23 @@ package com.citi.creditcard.controllers;
 
 import com.citi.creditcard.entity.Transaction;
 
-import com.citi.creditcard.exceptions.TransactionsNotFoundException;
 import com.citi.creditcard.services.TransactionService;
+import com.citi.creditcard.utility.SuccessResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
+
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/api/transactions")
+@RequestMapping("/api/transactions/")
 
 public class TransactionController {
 
@@ -26,73 +26,132 @@ public class TransactionController {
     private TransactionService transactionService;
 
     /**
-     *
      * @param merchant //
      * @return transactions
      */
-    @GetMapping("/findByMerchant")
-    public ResponseEntity<Object> getTransactionByMerchant(@RequestParam(name = "merchant") String merchant){
-        try {
-            List<Transaction> transactions = transactionService.getAllByMerchant(merchant);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(transactions);
-        } catch(IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-        catch (TransactionsNotFoundException e) {
-            throw new TransactionsNotFoundException(e.getMessage());
-        }
+    @GetMapping("by-merchant/{merchant}")
+    public ResponseEntity<Object> getTransactionsByMerchantWithPagination(
+            @PathVariable String merchant,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+            List<Transaction> transactions;
+            Pageable pageable = PageRequest.of(page, size);
+
+            Page<Transaction> pageTransaction = transactionService.getAllByMerchant(merchant, pageable);
+            transactions = pageTransaction.getContent();
+
+            return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data retrieved successfully", HttpStatus.OK, transactions, pageTransaction);
+
     }
 
     /**
-     *
-     * @param city //
+     * @param low, high //
      * @return transactions
      */
 
-    @GetMapping("/findByCity")
-    public ResponseEntity<Object> getTransactionByCity(@RequestParam String city){
-        try {
-            List<Transaction> transactions = transactionService.getAllByCity(city);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(transactions);
-        } catch(IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-        catch (TransactionsNotFoundException e) {
-            throw new TransactionsNotFoundException(e.getMessage());
-        }
+    @GetMapping("/spending")
+    public ResponseEntity<Object> getTransactionBySpendingAmt(@RequestParam double low,@RequestParam double high){
+        List<Transaction> transactions=transactionService.getAllBySpendingAmount(low,high);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(transactions);
+    }
+
+    @GetMapping("by-cities/{city}")
+    public ResponseEntity<Object> getTransactionsByCityWithPagination(
+            @PathVariable String city,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        List<Transaction> transactions;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Transaction> pageTransaction = transactionService.getAllByCity(city, pageable);
+        transactions = pageTransaction.getContent();
+
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data retrieved successfully", HttpStatus.OK, transactions, pageTransaction);
+
+    }
+
+    @GetMapping("by-states/{state}")
+    public ResponseEntity<Object> getTransactionsByStatesWithPagination(
+            @PathVariable String state,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        List<Transaction> transactions;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Transaction> pageTransaction = transactionService.getAllByState(state, pageable);
+        transactions = pageTransaction.getContent();
+
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data retrieved successfully", HttpStatus.OK, transactions, pageTransaction);
+
+    }
+
+    @GetMapping("by-gender/{gender}")
+    public ResponseEntity<Object> getTransactionsByGenderWithPagination(
+            @PathVariable String gender,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        List<Transaction> transactions;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Transaction> pageTransaction = transactionService.getAllByGender(gender, pageable);
+        transactions = pageTransaction.getContent();
+
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data retrieved successfully", HttpStatus.OK, transactions, pageTransaction);
+
     }
 
 
-    /**
-     *
-     * @param state //
-     * @return transactions
-     */
-    @GetMapping("/findByState")
-    public ResponseEntity<Object> getTransactionByState(@RequestParam String state){
-        try {
-            List<Transaction> transactions = transactionService.getAllByState(state);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(transactions);
-        } catch(IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-        catch (TransactionsNotFoundException e) {
-            throw new TransactionsNotFoundException(e.getMessage());
-        }
+    @GetMapping("by-category/{category}")
+    public ResponseEntity<Object> getTransactionsBySpendingCategoryWithPagination(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        List<Transaction> transactions;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Transaction> pageTransaction = transactionService.getAllBySpendingCategory(category, pageable);
+        transactions = pageTransaction.getContent();
+
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data retrieved successfully", HttpStatus.OK, transactions, pageTransaction);
+
     }
 
-    @GetMapping("/getAllStates")
+
+    @GetMapping("/states")
     public ResponseEntity<Object> getStates(){
-            List<String> transactions = transactionService.getAllDistinctStates();
-            return ResponseEntity.ok(transactions);
+        List<String> transactions = transactionService.getAllDistinctStates();
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data Retrieved Successfully", HttpStatus.OK, transactions, null );
     }
 
-    @GetMapping("/getAllCities")
+    @GetMapping("/cities")
     public ResponseEntity<Object> getCities(){
         List<String> transactions = transactionService.getAllDistinctCity();
-        return ResponseEntity.ok(transactions);
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data Retrieved Successfully", HttpStatus.OK, transactions, null );
     }
 
-
-
+    @GetMapping("/categories")
+    public ResponseEntity<Object> getSpendingCategories(){
+        List<String> transactions = transactionService.getAllDistinctSpendingCategories();
+        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data Retrieved Successfully", HttpStatus.OK, transactions, null );
+    }
 }
+
+
+
+
+
+
+
+
+
+
