@@ -14,7 +14,17 @@ import java.util.List;
 
 public interface TransactionRepository extends MongoRepository<Transaction, Integer> {
 
+
+    @Aggregation(pipeline = {
+            "{$group: {_id: '$merchant'}}",
+            "{$sort: {_id: 1}}"
+    })
+    List<String> findDistinctMerchantValues();
+
+
     Page<Transaction> findByMerchant(String merchant, Pageable pageable);
+
+
     Page<Transaction> findByCity(String city, Pageable pageable);
 
     @Aggregation(pipeline = {

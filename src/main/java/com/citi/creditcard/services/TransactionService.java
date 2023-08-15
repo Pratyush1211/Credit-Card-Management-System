@@ -1,12 +1,14 @@
 package com.citi.creditcard.services;
 
-
+import com.citi.creditcard.dto.CitiesInfoDTO;
+import com.citi.creditcard.dto.MerchantInfoDTO;
 import com.citi.creditcard.entity.Transaction;
 
 import com.citi.creditcard.exceptions.TransactionsNotFoundException;
+
+import com.citi.creditcard.repository.TransactionDALMongoTemplate;
 import com.citi.creditcard.repository.TransactionRepository;
 
-import org.apache.el.parser.AstPlus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,21 @@ public class TransactionService implements ITransactionService {
     @Autowired
     private TransactionRepository repo;
 
+    @Autowired
+    private TransactionDALMongoTemplate dalMongoTemplate;
+
+
+    // merchant methods
+    @Override
+    public List<String> getAllDistinctMerchants(){
+        return repo.findDistinctMerchantValues();
+    }
+
+    @Override
+    public MerchantInfoDTO getTotalAmountByMerchant(String merchant) {
+        return dalMongoTemplate.findMerchantTransactionDetails(merchant);
+    }
+
     @Override
     public Page<Transaction> getAllByMerchant(String merchant, Pageable pageable){
         validateStringNotEmpty(merchant, "Please enter merchant name to search");
@@ -29,6 +46,12 @@ public class TransactionService implements ITransactionService {
     }
 
 
+
+    // city methods
+    @Override
+    public CitiesInfoDTO getTotalAmountByCities(String city){
+        return dalMongoTemplate.findCityTransactionDetails(city);
+    }
 
     @Override
     public Page<Transaction> getAllByCity(String city, Pageable pageable){
