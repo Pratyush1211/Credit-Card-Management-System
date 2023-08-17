@@ -10,15 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Service
 public class CustomerService implements ICustomerService{
+    private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
     @Autowired
     private CustomerRepository repo;
 
     @Override
     public Customer addCustomer(Customer data){
+        logger.debug("Adding customer: {}", data);
         StringBuilder missingFields = new StringBuilder();
 
         if (data == null) {
@@ -42,37 +45,51 @@ public class CustomerService implements ICustomerService{
         }
 
         if (!missingFields.isEmpty()) {
+            logger.error("Fields are missing");
             String errorMessage = "The following fields are missing: " + missingFields.substring(0, missingFields.length() - 2);
             throw new IllegalArgumentException(errorMessage);
         }
-        if( repo.existsByCustomerId(data.getCustomerId()))
+        if( repo.existsByCustomerId(data.getCustomerId())){
+            logger.error("Customer already exists with ID: {}", data.getCustomerId());
             throw new CustomerAlreadyExistsException("Customer already present with ID: " + data.getCustomerId());
+        }
+
+        logger.debug("Customer added successfully: {}", data);
         return  repo.save(data);
     }
 
     @Override
     public Page<Customer> getAllCustomers(Pageable pageable){
-         return repo.findAll(pageable);
+        logger.debug("Getting all customers with pageable: {}", pageable);
+        return repo.findAll(pageable);
     }
 
 
     @Override
     public Customer deleteCustomer(Integer customerId){
+        logger.debug("Deleting customer with ID: {}", customerId);
         if (customerId == null) {
+            logger.error("Customer ID is missing");
             throw new IllegalArgumentException("Please enter customer ID");
         }
-        if (!repo.existsByCustomerId(customerId))
+        if (!repo.existsByCustomerId(customerId)){
+            logger.error("No customer exists with ID: {}", customerId);
             throw new CustomerNotFoundException("No customer exists with ID: " + customerId);
+        }
         return repo.deleteCustomerByCustomerId(customerId);
     }
 
     @Override
     public Customer getCustomer(Integer customerId){
+        logger.debug("Getting customer with ID: {}", customerId);
         if (customerId == null) {
+            logger.error("Customer ID is missing");
             throw new IllegalArgumentException("Please enter customer ID");
         }
-        if (!repo.existsByCustomerId(customerId))
+        if (!repo.existsByCustomerId(customerId)){
+            logger.error("No customer exists with ID: {}", customerId);
             throw new CustomerNotFoundException("No customer exists with ID: " + customerId);
+        }
         return repo.deleteCustomerByCustomerId(customerId);
     }
 
