@@ -24,3 +24,5 @@ public class SuccessResponseHandler {
         return new ResponseEntity<>(map,status);
     }
 }
+
+//const {data} = reponse.data
