@@ -41,7 +41,7 @@ public class CustomerService implements ICustomerService{
             missingFields.append("Date of Birth, ");
         }
 
-        if (missingFields.length() > 0) {
+        if (!missingFields.isEmpty()) {
             String errorMessage = "The following fields are missing: " + missingFields.substring(0, missingFields.length() - 2);
             throw new IllegalArgumentException(errorMessage);
         }

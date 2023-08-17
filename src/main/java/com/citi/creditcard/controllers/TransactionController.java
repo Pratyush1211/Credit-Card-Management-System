@@ -1,5 +1,7 @@
 package com.citi.creditcard.controllers;
 
+import com.citi.creditcard.dto.CitiesInfoDTO;
+import com.citi.creditcard.dto.MerchantInfoDTO;
 import com.citi.creditcard.entity.Transaction;
 
 import com.citi.creditcard.services.TransactionService;
@@ -24,6 +26,19 @@ public class TransactionController {
 
     @Autowired
     private TransactionService transactionService;
+
+    @GetMapping("merchants")
+    public ResponseEntity<Object> getMerchantInfo(@RequestParam(value = "merchant", required = false) String merchant){
+        if ( merchant == null) {
+            List<String> transactions = transactionService.getAllDistinctMerchants();
+            return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data Retrieved Successfully", HttpStatus.OK, transactions, null );
+        }
+        else {
+            MerchantInfoDTO merchantInfoDTO = transactionService.getTotalAmountByMerchant(merchant);
+            return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data Retrieved Successfully", HttpStatus.OK, merchantInfoDTO, null);
+        }
+    }
+
 
     /**
      * @param merchant //
@@ -50,12 +65,24 @@ public class TransactionController {
      * @param low, high //
      * @return transactions
      */
-
     @GetMapping("/spending")
     public ResponseEntity<Object> getTransactionBySpendingAmt(@RequestParam double low,@RequestParam double high){
         List<Transaction> transactions=transactionService.getAllBySpendingAmount(low,high);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(transactions);
     }
+
+
+    @GetMapping("cities")
+    public ResponseEntity<Object> getCityInfo(@RequestParam(value = "city", required = false) String city){
+        if( city == null ) {
+            List<String> transactions = transactionService.getAllDistinctCity();
+            return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data Retrieved Successfully", HttpStatus.OK, transactions, null);
+        } else {
+            CitiesInfoDTO cityInfoDTO = transactionService.getTotalAmountByCities(city);
+            return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data Retrieved Successfully", HttpStatus.OK, cityInfoDTO, null);
+        }
+    }
+
 
     @GetMapping("by-cities/{city}")
     public ResponseEntity<Object> getTransactionsByCityWithPagination(
@@ -133,11 +160,6 @@ public class TransactionController {
         return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data Retrieved Successfully", HttpStatus.OK, transactions, null );
     }
 
-    @GetMapping("/cities")
-    public ResponseEntity<Object> getCities(){
-        List<String> transactions = transactionService.getAllDistinctCity();
-        return SuccessResponseHandler.generateResponse(LocalDateTime.now(), "Data Retrieved Successfully", HttpStatus.OK, transactions, null );
-    }
 
     @GetMapping("/categories")
     public ResponseEntity<Object> getSpendingCategories(){
