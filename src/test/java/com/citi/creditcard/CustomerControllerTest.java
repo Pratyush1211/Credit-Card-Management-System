@@ -51,10 +51,10 @@ public class CustomerControllerTest {
         when(customerService.getCustomer(190)).thenReturn(mockCustomer);
 
         ResponseEntity<String> response = restTemplate.getForEntity(
-                "http://localhost:8080" + "/api/customers/190",
+                 "/api/customers/190",
                 String.class
         );
-
+        // "http://localhost:8080"
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -93,7 +93,7 @@ public class CustomerControllerTest {
 
     @Test
     public void testDeleteCustomer() {
-        Customer mockCustomer = new Customer();
+        /*Customer mockCustomer = new Customer();
         mockCustomer.setCustomerId(3);
         mockCustomer.setFirstName("Alice");
 
@@ -105,10 +105,22 @@ public class CustomerControllerTest {
                 null,
                 String.class
         );
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());*/
+        Customer mockCustomer = new Customer();
+        mockCustomer.setCustomerId(3);
+        mockCustomer.setFirstName("Alice");
+
+        when(customerService.deleteCustomer(3)).thenReturn(mockCustomer);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/api/customers/3",
+                org.springframework.http.HttpMethod.DELETE,
+                null,
+                String.class
+        );
+
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        // Validate the response body using JSON parsing libraries
     }
-
-
-
 
 }
