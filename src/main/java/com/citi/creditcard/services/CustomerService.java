@@ -90,7 +90,7 @@ public class CustomerService implements ICustomerService{
             logger.error("No customer exists with ID: {}", customerId);
             throw new CustomerNotFoundException("No customer exists with ID: " + customerId);
         }
-        return repo.deleteCustomerByCustomerId(customerId);
+        return repo.findCustomerByCustomerId(customerId);
     }
 
 }

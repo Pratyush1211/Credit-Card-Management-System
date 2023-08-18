@@ -39,7 +39,7 @@ public class CustomerControllerTest {
 
     @BeforeEach
     public void setup() {
-        baseUrl = "http://localhost:8080" + "/api/customers/";
+        baseUrl ="/api/customers/";
     }
 
     @Test
@@ -51,7 +51,7 @@ public class CustomerControllerTest {
         when(customerService.getCustomer(190)).thenReturn(mockCustomer);
 
         ResponseEntity<String> response = restTemplate.getForEntity(
-                "http://localhost:8080" + "/api/customers/190",
+                "/api/customers/190",
                 String.class
         );
 

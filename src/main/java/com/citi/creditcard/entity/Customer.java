@@ -34,7 +34,7 @@ public class Customer {
 
     @Field("dob")
     @NotBlank(message = "Date of Birth Required")
-    private LocalDateTime dob;
+    private String dob;
 
 
     public int getCustomerId() {
@@ -77,11 +77,11 @@ public class Customer {
         this.job = job;
     }
 
-    public LocalDateTime getDOB() {
+    public String getDOB() {
         return dob;
     }
 
-    public void setDOB(LocalDateTime dob) {
+    public void setDOB(String dob) {
         this.dob = dob;
     }
 
